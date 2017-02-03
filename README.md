@@ -16,7 +16,7 @@ ticket component enables users create support ticket from the application
 *  Clone code from git
 *  Follow https://www.polymer-project.org/1.0/docs/tools/polymer-cli to install cli
 *  AsOfNow
-![alt tag](https://github.com/kris444/ticket-component/blob/master/planning/sketches/AsOfNow.png)
+![alt tag](https://github.com/kris444/ticket-component/blob/master/planning/sketches/AsOfNow.PNG)
 *  polymer serve will show above from demo page
 
 ## Future?
