@@ -1,0 +1,129 @@
+<script src="../webcomponentsjs/webcomponents-lite.js"></script>
+
+<link rel="import" href="ticket-component-styles.html">
+
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../iron-icons/iron-icons.html">
+<link rel="import" href="../iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../paper-input/paper-input.html">
+<link rel="import" href="../paper-input/paper-textarea.html">
+<link rel="import" href="../paper-checkbox/paper-checkbox.html">
+<link rel="import" href="../vaadin-date-picker/vaadin-date-picker.html">
+<link rel="import" href="../paper-button/paper-button.html">
+
+<!--
+`ticket-component`
+ticketing component simplifies creating ticket for an application
+
+@demo demo/index.html 
+-->
+
+<dom-module id="ticket-component">
+  <template>
+    <style is="custom-style">
+       .flex-horizontal{ 
+                @apply(--layout-horizotal); 
+                } 
+              .flexchild{ 
+                    @apply(--layout-flex); 
+                }
+                 .fxs-contextpane {
+                         display:block;
+                         max-width: 435px;
+                         min-width: 435px;
+                         height: 100%;
+                         position: relative;
+                         z-index: 200;
+
+                         background-color: #fff;
+                         color: #fff;
+                         border-color: #3d4247;
+                         border-width: 1px;
+                         border-style: groove;
+                         padding: 0.5em;
+                   }
+
+                   .pull-right{
+                     float:right;
+                   }
+
+                   .opened{
+                        display: block;
+                   }
+
+                   .closed{
+                        display: none;
+                   }
+                   .top-menu-icons{
+                     display:block;
+                     width:100%;     
+                     height:2em;                
+                   }
+
+                   .ticket-submit{
+                     padding-top:2em;
+                   }
+
+    </style>
+
+<span><iron-icon icon="icons:book" on-tap="toggleVisibility"></iron-icon></span>
+<div class$="{{_toggleClass}}">
+  <div class="fxs-contextpane pull-right">
+
+    <div class="container flex-vertical">
+      <!-- top icon -->
+      <div class="top-menu-icons">
+        <span class="pull-right"> <iron-icon icon="icons:close"  style="fill:black" on-tap="close"/></span>
+</div>
+<!-- user input -->
+<div class="ticket-title">
+  <paper-input label="Title"></paper-input>
+</div>
+<div class="flexchild-vertical ticket-description">
+  <paper-textarea label="description of issue" rows=10></paper-textarea>
+</div>
+<div class="ticket-attachments">
+  <paper-checkbox checked><span><iron-icon icon="icons:attachment"></span>Attach logs</paper-checkbox>
+  <paper-checkbox checked><span><iron-icon icon="icons:camera-enhance"></span>Attach screen shot</paper-checkbox>
+</div>
+<div class="ticket-wishdate">
+  <vaadin-date-picker label="Wishdate"> </vaadin-date-picker>
+</div>
+<div class="ticket-submit">
+  <paper-button toggles raised class="pull-right" style="color:black;"><span><iron-icon icon="check"></iron-icon></span>Submit</paper-button>
+</div>
+
+</div>
+</div>
+</div>
+</template>
+
+<script>
+  var isShown = false;
+  Polymer({
+
+    is: 'ticket-component',
+
+    properties: {
+
+    },
+    ready: function () {
+      this._toggleClass = "closed";
+    },
+    toggleVisibility: function () {
+      isShown = !isShown;
+      this._toggleClass = "";
+      this._toggleClass = isShown ? "opened" : "closed";
+
+    },
+    close: function () {
+      //TODO duplicate, calling in-funcctions is not allowed
+      isShown = !isShown;
+      this._toggleClass = "";
+      this._toggleClass = isShown ? "opened" : "closed";
+      //clear all
+    }
+
+  });
+</script>
+</dom-module>
