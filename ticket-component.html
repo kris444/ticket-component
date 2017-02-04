@@ -69,70 +69,68 @@ ticketing component simplifies creating ticket for an application
     
     .top-menu-close .ticket-label {
       fill: black;
-      color:black;
-      margin-top:-4em;
+      color: black;
+      margin-top: -4em;
       float: right;
     }
-
-    .ticket-title{
+    
+    .ticket-title {
       text-align: center;
     }
   </style>
 
   <span><iron-icon icon="icons:book" on-tap="toggleVisibility"></iron-icon></span>
   <div class$="{{_toggleClass}}">
-    <div class="fxs-contextpane pull-right">
-
-      <div class="container flex-vertical">
-        <!-- top icon -->
-        <div class="top-menu-icons">
+      <div class="fxs-contextpane pull-right">
+        <div class="container flex-vertical">
+          <!-- top icon -->
+          <div class="top-menu-icons">
+            <div class="ticket-title">
+              <h3>Create impulse ticket</h3>
+            </div>
+            <span class="pull-right top-menu-close"> <iron-icon icon="icons:close" style="fill:black" on-tap="close"/></span>
+          </div>
+          <!-- user input -->
+          <div class="ticket-priority">
+            <label id="label1" class="ticket-label"><b>Priority:</b></label>
+            <paper-radio-group id="priority" selected$="{{_prioritySelected}}" attr-for-selected="value">
+              <paper-radio-button value="low" name="low">Low</paper-radio-button>
+              <paper-radio-button value="medium" name="medium">Medium</paper-radio-button>
+              <paper-radio-button value="high" name="high">High</paper-radio-button>
+            </paper-radio-group>
+          </div>
           <div class="ticket-title">
-             <h3>Create impulse ticket</h3>
+            <paper-input label="Title" id="title" char-counter maxlength="100" required value$="{{_title}}"></paper-input>
           </div>
-          <span class="pull-right top-menu-close"> <iron-icon icon="icons:close" style="fill:black" on-tap="close"/></span>
-        </div>
-        <!-- user input -->
-        <div class="ticket-priority">
-          <label id="label1" class="ticket-label"><b>Priority:</b></label>
-          <paper-radio-group selected="{{_prioritySelected}}" attr-for-selected="value">
-            <paper-radio-button value="low" name="low">Low</paper-radio-button>
-            <paper-radio-button value="medium" name="medium">Medium</paper-radio-button>
-            <paper-radio-button value="high" name="high">High</paper-radio-button>
-          </paper-radio-group>
-        </div>
-        <div class="ticket-title">
-          <paper-input label="Title" char-counter maxlength="100"></paper-input>
-        </div>
-        <div class="flexchild-vertical ticket-description">
-          <paper-textarea label="description of issue" rows=8 char-counter maxlength="500"></paper-textarea>
-        </div>
-        <div class="ticket-attachments container flex-horizontal">
-          <div>
-            <paper-checkbox><span><iron-icon icon="icons:attachment"></span>Attach logs</paper-checkbox>
+          <div class="flexchild-vertical ticket-description">
+            <paper-textarea label="description of issue" id="desc" rows=8 char-counter maxlength="500" required value$="{{_desc}}"></paper-textarea>
           </div>
-          <div>
-            <paper-checkbox><span><iron-icon icon="icons:camera-enhance"></span>Attach screen shot</paper-checkbox>
+          <div class="ticket-attachments container flex-horizontal">
+            <div>
+              <paper-checkbox id="attachment" on-change="attachmentHandler" checked$="{{_attachment}}"><span><iron-icon icon="icons:attachment"></span>Attach logs</paper-checkbox>
+            </div>
+            <div>
+              <paper-checkbox id="screenshot" on-change="screenshotHandler" checked$="{{_screenshot}}"><span><iron-icon icon="icons:camera-enhance"></span>Attach screen shot</paper-checkbox>
+            </div>
           </div>
-        </div>
-        <div class="ticket-wishdate">
-          <vaadin-date-picker label="Wishdate"> </vaadin-date-picker>
-        </div>
-        <div class="ticket-assignto">
-          <paper-dropdown-menu label="Assign to">
-            <paper-listbox class="dropdown-content" selected=1>
-              <template is="dom-repeat" items="{{assignTo}}" as="item">
-                <paper-item>{{item.name}}</paper-item>
-               </template> 
-            </paper-listbox>
-          </paper-dropdown-menu>
-        </div>
-        <div class="ticket-submit pull-right">
+          <div class="ticket-wishdate">
+            <vaadin-date-picker label="Wishdate" id="wishdate" value$="{{_wishdate}}"> </vaadin-date-picker>
+          </div>
+          <div class="ticket-assignto">
+            <paper-dropdown-menu label="Assign to">
+              <paper-listbox class="dropdown-content" selected=1>
+                <template is="dom-repeat" items$="{{assignTo}}" as="item">
+                  <paper-item>{{item.name}}</paper-item>
+                </template>
+              </paper-listbox>
+            </paper-dropdown-menu>
+          </div>
+          <div class="ticket-submit pull-right">
             <paper-button toggles raised style="color:black;" on-tap="close"><span><iron-icon icon="close"></iron-icon></span>Cancel</paper-button>
-          <paper-button toggles raised style="color:black;"><span><iron-icon icon="check"></iron-icon></span>Submit</paper-button>
+            <paper-button toggles raised style="color:black;" on-tap="submit"><span><iron-icon icon="check"></iron-icon></span>Submit</paper-button>
+          </div>
         </div>
-
       </div>
-    </div>
   </div>
 </template>
 
@@ -163,27 +161,55 @@ ticketing component simplifies creating ticket for an application
         value: true
       }
     },
+    // life-cycle
+    created : function(){
+        
+    },
     ready: function () {
-      this._toggleClass = "ticket-hide";
-      this._prioritySelected = this.defaultPriority;
+      this.initialize();
+      this._prioritySelected = this.defaultPriority;    
 
       //events registration
+      this.$.priority.addEventListener('paper-radio-group-changed', function(evt){
+        
+      });      
+    },
+    // custom fn
+    initialize: function(){
+        this._title = '';
+        this._desc ='';
+        this._screenshot = false;
+        this._attachment = false;
+        this._wishdate = this.getdate(new Date());;
+        this._toggleClass = "ticket-hide";
     },
     toggleVisibility: function () {
       isShown = !isShown;
       this._toggleClass = "";
       this._toggleClass = isShown ? "ticket-show" : "ticket-hide";
-
     },
     close: function () {
       this.toggleVisibility();
-      this.clearAll();
     }, 
-
-    clearAll: function(){
-      // clear all fields
-    }
-
+    submit: function(){
+      console.log(this._wishdate);
+      var validForm = this.$.title.validate() && this.$.desc.validate();
+     if(!validForm){       
+       console.log('Form cannot be submitted');
+       return;
+     }
+      
+    console.log('Form valid');
+    },     
+    attachmentHandler: function(evt){
+    }, 
+    screenshotHandler: function(evt){
+    },
+    //helpers
+    getdate: function(date){    
+       var add = function(d){return d < 10 ? ('0'+ d) : d};
+       return date.getFullYear() + '-' + add(date.getMonth() + 1)  + '-' + add(date.getDate());
+    } 
   });
 </script>
 </dom-module>
