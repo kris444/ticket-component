@@ -1,0 +1,26 @@
+{
+  "name": "ticket-component",
+  "version": "1.0.0",
+  "description": "ticket component enables users create support ticket from the application",
+  "main": "gulpfile.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kris444/ticket-component.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kris444/ticket-component/issues"
+  },
+  "homepage": "https://github.com/kris444/ticket-component#readme",
+  "devDependencies": {
+    "del": "^2.2.2",
+    "gulp-vulcanize": "^6.1.0"
+  }
+}
